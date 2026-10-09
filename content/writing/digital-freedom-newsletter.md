@@ -4,6 +4,7 @@ description = "Why today's circumvention tools fail against shutdowns like Iran'
 weight = 1
 
 [extra]
-forthcoming = true
+forthcoming = false
 source = "SCSP"
+url = "https://scsp222.substack.com/p/the-next-generation-technology-stack"
 +++
