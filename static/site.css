@@ -33,6 +33,7 @@
   --link: #e8567a;
   --link-hover: #eb7893;
   --focus: #bd0840;
+  --selection-bg: rgba(232, 86, 122, 0.35);
   --page-width: 75ch;
   --step--1: 0.9rem;
   --step-0: 1rem;
@@ -45,7 +46,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     --bg-deep: #ece7ee;
     --bg: #f4f4f3;
     --rule: #d8d8db;
@@ -56,12 +57,33 @@
     --link: #e8567a;
     --link-hover: #eb7893;
     --focus: #bd0840;
+    --selection-bg: rgba(232, 86, 122, 0.22);
+    color-scheme: light;
   }
 }
 
+:root[data-theme="light"] {
+  --bg-deep: #ece7ee;
+  --bg: #f4f4f3;
+  --rule: #d8d8db;
+  --text: #3a3a3d;
+  --text-strong: #181819;
+  --muted: #666668;
+  --accent: #bd0840;
+  --link: #e8567a;
+  --link-hover: #eb7893;
+  --focus: #bd0840;
+  --selection-bg: rgba(232, 86, 122, 0.22);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
 ::selection {
-  background: #3a1b18;
-  color: var(--text);
+  background: var(--selection-bg);
+  color: var(--text-strong);
 }
 
 * {
@@ -108,8 +130,17 @@ main {
   margin: 0 auto;
 }
 
-.site-nav {
+.site-header {
+  width: min(calc(100% - 2rem), var(--page-width));
+  margin: 0 auto;
   padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.site-nav {
   font-size: 0.78rem;
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -117,6 +148,38 @@ main {
 
 .site-nav .nav-current {
   color: var(--muted);
+}
+
+.theme-toggle {
+  flex-shrink: 0;
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--link);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--link) 50%, transparent);
+  transition: color 120ms ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  color: var(--link-hover);
+  text-decoration-color: var(--link-hover);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 .page-home {

@@ -4,13 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {}
+      })();
+    </script>
     {% include "partials/head-meta.html" %}
     <link rel="alternate" type="application/atom+xml" title="{{ config.title }} Atom Feed" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">
     <link rel="stylesheet" href="{{ get_url(path='site.css', trailing_slash=false) }}">
   </head>
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
-    <div class="site-chrome">
+    <header class="site-header">
       <nav class="site-nav" aria-label="Primary">
         {% block nav_home %}
           <a href="{{ config.base_url }}">Home</a>
@@ -24,7 +34,8 @@
           <a href="{{ get_url(path='contact/', trailing_slash=true) }}">Contact</a>
         {% endblock nav_contact %}
       </nav>
-    </div>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">theme</button>
+    </header>
     {% block main %}{% endblock main %}
     <footer class="site-footer">
       <div class="site-chrome">
@@ -48,5 +59,33 @@
         <p class="site-copyright">Copyright &copy; 2026 {{ config.extra.name }}</p>
       </div>
     </footer>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var button = document.getElementById("theme-toggle");
+        if (!button) return;
+
+        function currentTheme() {
+          var set = root.getAttribute("data-theme");
+          if (set) return set;
+          return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+
+        function render() {
+          var t = currentTheme();
+          button.textContent = "theme: " + t;
+          button.setAttribute("aria-pressed", t === "dark" ? "false" : "true");
+        }
+
+        button.addEventListener("click", function () {
+          var next = currentTheme() === "dark" ? "light" : "dark";
+          root.setAttribute("data-theme", next);
+          try { localStorage.setItem("theme", next); } catch (e) {}
+          render();
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>
